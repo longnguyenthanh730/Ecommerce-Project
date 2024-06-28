@@ -424,6 +424,8 @@ class ProductCreateAPIView(generics.CreateAPIView):
         self.save_nested_data(product_instance, ColorSerializer, colors_data)
         self.save_nested_data(product_instance, GallerySerializer, gallery_data)
 
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     def save_nested_data(self, product_instance, serializer_class, data):
         serializer = serializer_class(data=data, many=True, context = {'product_instance': product_instance})
         serializer.is_valid(raise_exception=True)
