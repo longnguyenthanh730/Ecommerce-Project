@@ -19,6 +19,8 @@ function UpdateProduct() {
 
     const navigate = useNavigate()
 
+    console.log(product);
+
     const handleAddMore = (setStateFunction) => {
         setStateFunction((prevState) => [...prevState, {}])
     }

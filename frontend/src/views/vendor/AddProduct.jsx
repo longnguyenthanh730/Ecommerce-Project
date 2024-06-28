@@ -4,13 +4,24 @@ import { useNavigate } from 'react-router-dom'
 import apiInstance from '../../utils/axios'
 import UserData from '../plugin/UserData'
 import Swal from 'sweetalert2'
-import moment from 'moment'
-
 
 function AddProduct() {
     const userData = UserData()
 
-    const [product, setProduct] = useState([])
+    const [product, setProduct] = useState({
+        title: '',
+        image: null,
+        description: '',
+        category: '',
+        tags: '',
+        brand: '',
+        price: '',
+        old_price: '',
+        shipping_amount: '',
+        stock_qty: '',
+        vendor: userData?.vendor_id
+    })
+
     const [specifications, setSpecifications] = useState([{title: '', content: ''}])
     const [colors, setColors] = useState([{name: '', color_code: ''}])
     const [sizes, setSizes] = useState([{name: '', price: ''}])

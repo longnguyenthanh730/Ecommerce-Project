@@ -395,7 +395,6 @@ class ProductCreateAPIView(generics.CreateAPIView):
             # specification[0][title]
             if key.startswith('specifications') and '[title]' in key:
                 index = key.split('[')[1].split(']')[0]
-
                 title = value
                 content_key = f'specifications[{index}][content]'
                 content = self.request.data.get(content_key)
@@ -495,12 +494,12 @@ class ProductUpdateAPIView(generics.RetrieveUpdateAPIView):
         self.save_nested_data(product, ColorSerializer, colors_data)
         self.save_nested_data(product, GallerySerializer, gallery_data)
 
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     def save_nested_data(self, product_instance, serializer_class, data):
         serializer = serializer_class(data=data, many=True, context = {'product_instance': product_instance})
         serializer.is_valid(raise_exception=True)
         serializer.save(product = product_instance)
-
-        return Response({'message': 'Product Updated'}, status=status.HTTP_200_OK)
 
 
 class ProductDeleteAPIView(generics.DestroyAPIView):

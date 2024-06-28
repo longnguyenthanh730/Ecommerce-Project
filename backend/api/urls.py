@@ -69,5 +69,4 @@ urlpatterns = [
     path('vendor/create-product/', vendor_views.ProductCreateAPIView.as_view()),
     path('vendor/update-product/<vendor_id>/<product_pid>/', vendor_views.ProductUpdateAPIView.as_view()),
     path('vendor/delete-product/<vendor_id>/<product_pid>/', vendor_views.ProductDeleteAPIView.as_view()),
-    # path('vendor-register/', vendor_views.VendorRegister.as_view()),
 ]
