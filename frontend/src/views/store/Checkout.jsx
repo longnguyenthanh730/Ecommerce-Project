@@ -4,7 +4,7 @@ import apiInstance from '../../utils/axios'
 import Swal from 'sweetalert2'
 import {SERVER_URL, PAYPAL_CLIENT_ID} from '../../utils/constants'
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js"
-
+import { Helmet } from 'react-helmet-async'
 
 function Checkout() {
     const [order, setOrder] = useState([])
@@ -12,8 +12,8 @@ function Checkout() {
     const [paymentLoading, setPaymentLoading] = useState(false)
     const param = useParams()
     const navigate = useNavigate()
-    const fetchOrderData = () => {
-        apiInstance.get(`checkout/${param.order_oid}/`).then((res) => {
+    const fetchOrderData = async () => {
+        await apiInstance.get(`checkout/${param.order_oid}/`).then((res) => {
             setOrder(res.data)
         })
     }
@@ -57,6 +57,9 @@ function Checkout() {
 
   return (
     <div>
+        <Helmet>
+        <title>Checkout Page</title>
+        </Helmet>
         <main>
             <main className="mb-4 mt-4">
                 <div className="container">

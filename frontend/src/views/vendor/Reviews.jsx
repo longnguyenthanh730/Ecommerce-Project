@@ -2,22 +2,32 @@ import React, { useEffect, useState } from 'react'
 import Sidebar from './Sidebar'
 import apiInstance from '../../utils/axios'
 import UserData from '../plugin/UserData'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 
 function Reviews() {
     const [reviews, setReviews] = useState([])
 
     const userData = UserData()
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (userData?.vendor_id == 0) {
+            navigate('/vendor/register/')
+        }
+    }, [])
 
     useEffect(() => {
         apiInstance.get(`vendor/reviews/${userData?.vendor_id}/`).then((res) => {
         setReviews(res.data)
-        console.log(res.data);
         })
     }, [])
 
   return (
     <div className="container-fluid" id="main">
+        <Helmet>
+        <title>Reviews Page</title>
+        </Helmet>
         <div className="row row-offcanvas row-offcanvas-left h-100">
             <Sidebar/>
             <div className="col-md-9 col-lg-10 main mt-4">

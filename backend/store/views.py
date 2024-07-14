@@ -36,6 +36,11 @@ class ProductListAPIView(generics.ListAPIView):
     serializer_class = ProductSerializer
     permission_classes = [AllowAny]
 
+class FeaturedProductListView(generics.ListAPIView):
+    serializer_class = ProductSerializer
+    queryset = Product.objects.filter(status="published", featured=True)[:3]
+    permission_classes = [AllowAny]
+
 class ProductDetailAPIView(generics.RetrieveAPIView):
     serializer_class = ProductSerializer
     permission_classes = [AllowAny]
@@ -83,14 +88,14 @@ class CartAPIView(generics.ListCreateAPIView):
             cart.qty = qty
             cart.price = price
             cart.shipping_amount = Decimal(shipping_amount) * int(qty)
-            cart.tax_fee = int(qty) * Decimal(tax_rate)
             cart.sub_total = Decimal(price) * int(qty)
+            cart.tax_fee = int(qty) * Decimal(tax_rate)* cart.sub_total
             cart.color = color
             cart.size = size
             cart.country = country
             cart.cart_id = cart_id
 
-            service_fee_percentage = 20 / 100 
+            service_fee_percentage = 1 / 100 
             cart.service_fee = Decimal(service_fee_percentage) * cart.sub_total
 
             cart.total = cart.sub_total + cart.shipping_amount + cart.service_fee + cart.tax_fee
@@ -105,20 +110,20 @@ class CartAPIView(generics.ListCreateAPIView):
             cart.qty = qty
             cart.price = price
             cart.shipping_amount = Decimal(shipping_amount) * int(qty)
-            cart.tax_fee = int(qty) * Decimal(tax_rate)
             cart.sub_total = Decimal(price) * int(qty)
+            cart.tax_fee = int(qty) * Decimal(tax_rate)* cart.sub_total
             cart.color = color
             cart.size = size
             cart.country = country
             cart.cart_id = cart_id
 
-            service_fee_percentage = 20 / 100 
+            service_fee_percentage = 1 / 100 
             cart.service_fee = Decimal(service_fee_percentage) * cart.sub_total
 
             cart.total = cart.sub_total + cart.shipping_amount + cart.service_fee + cart.tax_fee
             cart.save()
 
-            return Response( {"message": "Cart Updated Successfully"}, status=status.HTTP_201_CREATED)
+            return Response( {"message": "Cart Created Successfully"}, status=status.HTTP_201_CREATED)
         
 
 
@@ -444,23 +449,23 @@ class PaymentSuccessView(generics.CreateAPIView):
 
                         try:
                             #Send Email To Vendors
-                                context = {
-                                'order': order,
-                                'order_items': order_items,
-                                'vendor': o.vendor,
-                                }
-                                subject = 'New Sale!'
-                                text_body = render_to_string("email/vendor_sale.txt", context)
-                                html_body = render_to_string("email/vendor_sale.html", context)
+                            context = {
+                            'order': order,
+                            'order_items': order_items,
+                            'vendor': o.vendor,
+                            }
+                            subject = 'New Sale!'
+                            text_body = render_to_string("email/vendor_sale.txt", context)
+                            html_body = render_to_string("email/vendor_sale.html", context)
 
-                                msg = EmailMultiAlternatives(
-                                    subject=subject,
-                                    from_email= settings.FROM_EMAIL,
-                                    to=[o.vendor.user.email],
-                                    body= text_body
-                                )
-                                msg.attach_alternative(html_body, "text/html")
-                                msg.send()
+                            msg = EmailMultiAlternatives(
+                                subject=subject,
+                                from_email= settings.FROM_EMAIL,
+                                to=[o.vendor.user.email],
+                                body= text_body
+                            )
+                            msg.attach_alternative(html_body, "text/html")
+                            msg.send()
                         except:
                             pass
 
@@ -510,23 +515,23 @@ class PaymentSuccessView(generics.CreateAPIView):
 
                     try:
                         #Send Email To Vendors
-                            context = {
-                            'order': order,
-                            'order_items': order_items,
-                            'vendor': o.vendor,
-                            }
-                            subject = 'New Sale!'
-                            text_body = render_to_string("email/vendor_sale.txt", context)
-                            html_body = render_to_string("email/vendor_sale.html", context)
+                        context = {
+                        'order': order,
+                        'order_items': order_items,
+                        'vendor': o.vendor,
+                        }
+                        subject = 'New Sale!'
+                        text_body = render_to_string("email/vendor_sale.txt", context)
+                        html_body = render_to_string("email/vendor_sale.html", context)
 
-                            msg = EmailMultiAlternatives(
-                                subject=subject,
-                                from_email= settings.FROM_EMAIL,
-                                to=[o.vendor.user.email],
-                                body= text_body
-                            )
-                            msg.attach_alternative(html_body, "text/html")
-                            msg.send()
+                        msg = EmailMultiAlternatives(
+                            subject=subject,
+                            from_email= settings.FROM_EMAIL,
+                            to=[o.vendor.user.email],
+                            body= text_body
+                        )
+                        msg.attach_alternative(html_body, "text/html")
+                        msg.send()
                     except:
                         pass
 
@@ -562,10 +567,9 @@ class PaymentSuccessView(generics.CreateAPIView):
                 return Response({"message" : "An Error Occured, Try Again..."})
         else:
             session = None
-
+ 
 
 class ReviewListAPIView(generics.ListCreateAPIView):
-    # queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     permission_classes = [AllowAny]
 
@@ -589,7 +593,7 @@ class ReviewListAPIView(generics.ListCreateAPIView):
 
         Review.objects.create(user=user, product=product, rating=rating, review=review)
     
-        return Response( {"message": "Review Created Successfully."}, status=status.HTTP_201_CREATED)
+        return Response( {"message": "Review Created Successfully."}, status=status.HTTP_201_CREATED)   
 
 class SearchProductAPIView(generics.ListCreateAPIView):
     serializer_class = ProductSerializer

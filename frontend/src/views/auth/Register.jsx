@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { register } from '../../utils/auth';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/auth';
-
+import { Helmet } from 'react-helmet-async'
 
 function Register() {
 
@@ -46,6 +46,9 @@ function Register() {
 
   return (
     <>
+        <Helmet>
+        <title>Register</title>
+        </Helmet>
       <main className="" style={{ marginBottom: 100, marginTop: 50 }}>
         <div className="container">
             {/* Section: Login form */}

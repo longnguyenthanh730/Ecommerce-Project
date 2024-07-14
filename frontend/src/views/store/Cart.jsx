@@ -7,6 +7,7 @@ import GetCurrentAddress from '../plugin/UserCountry'
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
 import { CartContext } from '../plugin/Context'
+import { Helmet } from 'react-helmet-async'
 
 const Toast = Swal.mixin ({
     toast: true,
@@ -206,6 +207,9 @@ function Cart() {
 
     return (
         <div>
+        <Helmet>
+        <title>Shopping Cart</title>
+        </Helmet>
             <main className="mt-5">
                 <div className="container">
                 <main className="mb-6">
@@ -226,7 +230,7 @@ function Cart() {
                                             src={c.product?.image}
                                             className="w-100"
                                             alt=""
-                                            style={{ width: "100%", height: "100px", objectFit: "cover", borderRadius: "10px" }}
+                                            style={{ width: "100%", height: "110px", borderRadius: "10px" }}
                                         />
                                         </Link>
                                         <a href="#!">
@@ -262,10 +266,6 @@ function Cart() {
                                     <p className='mb-0'>
                                         <span className="text-muted me-2">Quantity:</span>
                                         <span>{c.qty}</span>
-                                    </p>
-                                    <p className='mb-0'>
-                                        <span className="text-muted me-2">Vendor:</span>
-                                        <span>Long Store</span>
                                     </p>
                                     <p className="mt-3">
                                         <button onClick={() => handleDeleteCartItem(c.id)} className="btn btn-danger ">

@@ -7,7 +7,7 @@ import Swal from 'sweetalert2'
 import { CartContext } from '../plugin/Context'
 import CardID from '../plugin/CardID'
 import GetCurrentAddress from '../plugin/UserCountry'
-
+import { Helmet } from 'react-helmet-async'
 
 const Toast = Swal.mixin ({
     toast: true,
@@ -122,6 +122,9 @@ function Shop() {
 
   return (
     <main className="mt-5">
+        <Helmet>
+        <title>Shop Page</title>
+        </Helmet>
         <div className="container">
             <section className="text-center container">
                 <div className="row py-lg-5">

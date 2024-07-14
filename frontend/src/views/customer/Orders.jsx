@@ -4,6 +4,7 @@ import UserData from "../plugin/UserData"
 import Sidebar from './Sidebar'
 import { Link } from "react-router-dom"
 import moment from 'moment'
+import { Helmet } from 'react-helmet-async'
 
 function Orders() {
     const [orders, setOrders] = useState([])
@@ -24,6 +25,9 @@ function Orders() {
 
   return (
     <div className="container mt-5">
+        <Helmet>
+        <title>Orders Page</title>
+        </Helmet>
         <section className="">
             <div className="row">
                 <Sidebar />

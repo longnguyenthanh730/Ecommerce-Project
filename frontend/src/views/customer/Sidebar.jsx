@@ -41,19 +41,19 @@ function Sidebar() {
                         <div className="ms-2 me-auto">
                             <Link to={'/customer/orders/'} className="fw-bold text-dark"><i className='fas fa-shopping-cart me-2'></i>Orders</Link>
                         </div>
-                        <span className="badge bg-primary rounded-pill">0</span>
+                        <span className="badge bg-primary rounded-pill"></span>
                     </li>
                     <li className="list-group-item d-flex justify-content-between align-items-start">
                         <div className="ms-2 me-auto">
                             <Link to={'/customer/wishlist/'} className="fw-bold text-dark"><i className='fas fa-heart fa-fade me-2'></i> Wishlist</Link>
                         </div>
-                        <span className="badge bg-primary rounded-pill">0</span>
+                        <span className="badge bg-primary rounded-pill"></span>
                     </li>
                     <li className="list-group-item d-flex justify-content-between align-items-start">
                         <div className="ms-2 me-auto">
                             <Link to={'/customer/notifications/'} className="fw-bold text-dark"><i className='fas fa-bell fa-shake me-2'></i> Notification</Link>
                         </div>
-                        <span className="badge bg-primary rounded-pill">0</span>
+                        <span className="badge bg-primary rounded-pill"></span>
                     </li>
                     <li className="list-group-item d-flex justify-content-between align-items-start">
                         <div className="ms-2 me-auto">

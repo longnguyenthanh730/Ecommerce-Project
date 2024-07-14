@@ -20,7 +20,7 @@ class ColorInLine(admin.TabularInline):
     extra = 0
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['title',   'price', 'category' , 'featured', 'shipping_amount', 'stock_qty', 'in_stock', 'vendor']
+    list_display = ['title',   'price', 'category' , 'featured', 'shipping_amount', 'stock_qty', 'vendor']
     list_editable = ['featured']
     list_filter = ['date']
     search_fields = ['title']

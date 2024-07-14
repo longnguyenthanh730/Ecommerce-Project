@@ -3,12 +3,21 @@ import Sidebar from './Sidebar'
 import apiInstance from '../../utils/axios'
 import UserData from '../plugin/UserData'
 import moment from 'moment'
+import { Helmet } from 'react-helmet-async'
+import { useNavigate } from 'react-router-dom'
 
 function Notification() {
     const [notifications, setNotifications] = useState([])
     const [notificationStats, setNotificationStats] = useState([])
 
     const userData = UserData()
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (userData?.vendor_id == 0) {
+            navigate('/vendor/register/')
+        }
+    }, [])
 
     const fetchNoti = async () => {
         await apiInstance.get(`vendor/notifications/${userData?.vendor_id}/`).then((res) => {
@@ -37,6 +46,9 @@ function Notification() {
 
   return (
     <div className="container-fluid" id="main">
+        <Helmet>
+        <title>Notifications Page</title>
+        </Helmet>
         <div className="row row-offcanvas row-offcanvas-left h-100">
             <Sidebar/>
             <div className="col-md-9 col-lg-10 main mt-4">
@@ -82,34 +94,8 @@ function Notification() {
                             {" "}
                             <i className="fas fa-bell" /> Notifications
                         </h4>
-                        <div className="dropdown">
-                            <button className="btn btn-secondary dropdown-toggle btn-sm mt-3 mb-4" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" > Filter <i className="fas fa-sliders" /> </button>
-                            <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <li>
-                                    <a className="dropdown-item" href="#">
-                                    Date: Latest
-                                    </a>
-                                </li>
-                                <li>
-                                    <a className="dropdown-item" href="#">
-                                    Date: Oldest
-                                    </a>
-                                </li>
-                                <hr />
-                                <li>
-                                    <a className="dropdown-item" href="#">
-                                    Status: Read
-                                    </a>
-                                </li>
-                                <li>
-                                    <a className="dropdown-item" href="#">
-                                    Status: UnRead
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
                         <table className="table">
-                            <thead className="table-dark">
+                            <thead className="table-dark">  
                             <tr>
                                 <th scope="col">Type</th>
                                 <th scope="col">Message</th>

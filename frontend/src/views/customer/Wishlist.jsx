@@ -4,6 +4,7 @@ import apiInstance from '../../utils/axios'
 import UserData from '../plugin/UserData'
 import { Link } from 'react-router-dom'
 import Swal from 'sweetalert2'
+import { Helmet } from 'react-helmet-async'
 
 function Wishlist() {
     const [wishlist, setWishlist] = useState([])
@@ -40,6 +41,9 @@ function Wishlist() {
 
     return (
         <div>
+        <Helmet>
+        <title>Wishlist Page</title>
+        </Helmet>
             <main className="mt-5">
                 <div className="container">
                     <section className="">

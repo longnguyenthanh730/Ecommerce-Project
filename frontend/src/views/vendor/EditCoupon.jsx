@@ -4,6 +4,7 @@ import apiInstance from '../../utils/axios'
 import UserData from '../plugin/UserData'
 import Swal from 'sweetalert2'
 import { Link, useParams } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 
 function EditCoupon() {
     const [coupon, setCoupon] = useState([])
@@ -48,6 +49,9 @@ function EditCoupon() {
 
   return (
     <div className="container-fluid" id="main" >
+        <Helmet>
+        <title>Edit Coupon</title>
+        </Helmet>
         <div className="row row-offcanvas row-offcanvas-left h-100">
             <Sidebar/>
             <div className="col-md-9 col-lg-10 main mt-4">

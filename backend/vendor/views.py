@@ -102,7 +102,7 @@ class RevenueAPIView(generics.ListAPIView):
     def get_queryset(self):
         vendor_id = self.kwargs['vendor_id']
         vendor = Vendor.objects.get(id=vendor_id)
-        revenue = CartOrderItem.objects.filter(vendor=vendor, order__payment_status="paid").aggregate(total_revenue=models.Sum(models.F('sub_total') + models.F('shipping_amount')))['total_revenue'] or 0
+        revenue = CartOrderItem.objects.filter(vendor=vendor, order__payment_status="paid").aggregate(total_revenue=models.Sum(models.F('sub_total')))['total_revenue'] or 0
         return revenue
 
 
@@ -175,8 +175,8 @@ class EarningAPIView(generics.ListAPIView):
         vendor = Vendor.objects.get(id=vendor_id)
 
         one_month_ago = datetime.today() - timedelta(days=28)
-        monthly_revenue = CartOrderItem.objects.filter(vendor=vendor, order__payment_status="paid", date__gte=one_month_ago).aggregate(total_revenue=models.Sum(models.F('sub_total') + models.F('shipping_amount')))['total_revenue'] or 0
-        total_revenue = CartOrderItem.objects.filter(vendor=vendor, order__payment_status="paid").aggregate(total_revenue=models.Sum(models.F('sub_total') + models.F('shipping_amount')))['total_revenue'] or 0
+        monthly_revenue = CartOrderItem.objects.filter(vendor=vendor, order__payment_status="paid", date__gte=one_month_ago).aggregate(total_revenue=models.Sum(models.F('sub_total')))['total_revenue'] or 0
+        total_revenue = CartOrderItem.objects.filter(vendor=vendor, order__payment_status="paid").aggregate(total_revenue=models.Sum(models.F('sub_total')))['total_revenue'] or 0
 
         return [{
             'monthly_revenue': monthly_revenue,
@@ -197,7 +197,7 @@ def MonthlyEarningTracker(request, vendor_id):
         .filter(vendor=vendor, order__payment_status="paid")
         .annotate(month=ExtractMonth("date"))
         .values("month")
-        .annotate(sales_count=models.Sum("qty"), total_earning=models.Sum(models.F('sub_total') + models.F('shipping_amount')))
+        .annotate(sales_count=models.Sum("qty"), total_earning=models.Sum(models.F('sub_total')))
         .order_by("-month")
     )
     return Response(monthly_earning_tracker)
@@ -515,3 +515,29 @@ class ProductDeleteAPIView(generics.DestroyAPIView):
         vendor = Vendor.objects.get(id=vendor_id)
         product = Product.objects.get(vendor=vendor, pid=product_pid)
         return product
+
+class VendorRegister(generics.CreateAPIView):
+    serializer_class = VendorSerializer
+    queryset = Vendor.objects.all()
+    permission_classes = [AllowAny]
+
+    def create(self, request, *args, **kwargs):
+        payload = request.data
+
+        image = payload['image']
+        name = payload['name']
+        email = payload['email']
+        description = payload['description']
+        mobile = payload['mobile']
+        user_id = payload['user_id']
+
+        Vendor.objects.create(
+            image=image,
+            name=name,
+            email=email,
+            description=description,
+            mobile=mobile,
+            user_id=user_id,
+        )
+
+        return Response({"message":"Created vendor account"})

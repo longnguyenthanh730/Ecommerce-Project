@@ -1,4 +1,5 @@
 import React from 'react'
+import {Link} from 'react-router-dom'
 
 function StoreFooter() {
 	return (
@@ -12,50 +13,50 @@ function StoreFooter() {
 						</div>
 						<div className="col-md-6 d-flex justify-content-center justify-content-md-end">
 							{/* Facebook */}
-							<a
+							<Link  to="https://facebook.com/"
 								className="btn btn-primary btn-sm btn-floating me-2"
 								style={{ backgroundColor: "#3b5998" }}
 								href="#!"
 								role="button"
 							>
 								<i className="fab fa-facebook-f" />
-							</a>
+							</Link>
 							{/* Twitter */}
-							<a
+							<Link to="https://x.com/"
 								className="btn text-white btn-sm btn-floating me-2"
 								style={{ backgroundColor: "#55acee" }}
 								href="#!"
 								role="button"
 							>
 								<i className="fab fa-twitter" />
-							</a>
+							</Link>
 							{/* Pinterest */}
-							<a
+							<Link to='https://www.pinterest.com/'
 								className="btn text-white btn-sm btn-floating me-2"
 								style={{ backgroundColor: "#c61118" }}
 								href="#!"
 								role="button"
 							>
 								<i className="fab fa-pinterest" />
-							</a>
+							</Link>
 							{/* Youtube */}
-							<a
+							<Link to='https://www.youtube.com/'
 								className="btn text-white btn-sm btn-floating me-2"
 								style={{ backgroundColor: "#ed302f" }}
 								href="#!"
 								role="button"
 							>
 								<i className="fab fa-youtube" />
-							</a>
+							</Link>
 							{/* Instagram */}
-							<a
+							<Link to='https://www.instagram.com/'
 								className="btn text-white btn-sm btn-floating me-2"
 								style={{ backgroundColor: "#ac2bac" }}
 								href="#!"
 								role="button"
 							>
 								<i className="fab fa-instagram" />
-							</a>
+							</Link>
 						</div>
 					</div>
 					<hr className="my-3" />

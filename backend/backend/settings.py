@@ -14,6 +14,8 @@ from pathlib import Path
 from datetime import timedelta
 from environs import Env
 import os
+import dj_database_url
+
 env = Env()
 env.read_env()
 
@@ -30,8 +32,9 @@ SECRET_KEY = 'django-insecure-(*r1tjav8t#&us(grke2^rhdu!-fh^es9qr#238s#h-7f*xdxr
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['final-project-api.up.railway.app', '127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['https://final-project-api.up.railway.app', 'https://127.0.0.1']
+SECUE_CROSS_ORIGIN_OPENER_POLICY='same-origin-allow-popups'
 
 # Application definition
 
@@ -103,6 +106,10 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+
+db_from_env = dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_from_env)
 
 
 # Password validation

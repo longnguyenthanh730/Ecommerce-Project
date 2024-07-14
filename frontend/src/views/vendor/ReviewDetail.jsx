@@ -4,6 +4,7 @@ import apiInstance from '../../utils/axios'
 import UserData from '../plugin/UserData'
 import { Link, useParams } from 'react-router-dom'
 import moment from 'moment'
+import { Helmet } from 'react-helmet-async'
 
 function ReviewDetail() {
     const [review, setReview] = useState({})
@@ -41,6 +42,9 @@ function ReviewDetail() {
 
   return (
     <div className="container-fluid" id="main">
+        <Helmet>
+        <title>Review {userData?.full_name}</title>
+        </Helmet>
         <div className="row row-offcanvas row-offcanvas-left h-100">
             <Sidebar/>
             <div className="col-md-9 col-lg-10 main mt-4">

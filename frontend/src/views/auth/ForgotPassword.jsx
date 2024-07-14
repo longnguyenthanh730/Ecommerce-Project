@@ -1,6 +1,7 @@
 import {useState} from 'react'
 import apiInstance from '../../utils/axios';
 import {useNavigate, Link} from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 
 function ForgotPassword() {
     const [email, setEmail] = useState("")
@@ -23,6 +24,9 @@ function ForgotPassword() {
 
   return (
     <section>
+        <Helmet>
+        <title>Forgot Password</title>
+        </Helmet>
         <main className="" style={{ marginBottom: 100, marginTop: 50 }}>
             <div className="container">
                 {/* Section: Login form */}

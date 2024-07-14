@@ -4,6 +4,7 @@ import apiInstance from '../../utils/axios'
 import UserData from '../plugin/UserData'
 import Swal from 'sweetalert2'
 import moment from 'moment'
+import { Helmet } from 'react-helmet-async'
 
 function CustomerNotification() {
     
@@ -33,6 +34,9 @@ function CustomerNotification() {
 
     return (
         <main className="mt-5">
+            <Helmet>
+            <title>Notifications Page</title>
+            </Helmet>
             <div className="container">
                 <section className="">
                     <div className="row">

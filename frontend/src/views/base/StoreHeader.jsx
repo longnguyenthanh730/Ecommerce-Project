@@ -14,8 +14,8 @@ function StoreHeader() {
     const navigate = useNavigate()
 
     const handleSearchChange = (event) => {
-        setSearch(event.target.value);
-        console.log(search);
+        setSearch(event.target.value)
+        // console.log(search);
     }
 
     const handleSearchSubmit = () => {
@@ -27,7 +27,9 @@ function StoreHeader() {
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
                 <div className="container">
                     <Link className="navbar-brand" to="/">
-                        Long Store
+                        <img src='https://baabrand.com/wp-content/uploads/2018/12/icon-thiet-ke-logo-thuong-hieu-baabrand-4.png' style={{ width: "60px", height: "60px"}} alt="" />
+                        SLphone
+                        
                     </Link>
                     <button
                         className="navbar-toggler"
@@ -189,7 +191,7 @@ function StoreHeader() {
                         {isLoggedIn()
                             ?
                             <>
-                                <Link className="btn btn-primary me-2" to={'/dashboard'}>Dashboard</Link>
+                                {/* <Link className="btn btn-primary me-2" to={'/dashboard'}>Dashboard</Link> */}
                                 <Link className="btn btn-primary me-2" to="/logout">Logout</Link>
                             </>
                             :
@@ -207,7 +209,7 @@ function StoreHeader() {
                 </div>
             </nav>
         </div>
-    );
+    )
 }
 
 export default StoreHeader;

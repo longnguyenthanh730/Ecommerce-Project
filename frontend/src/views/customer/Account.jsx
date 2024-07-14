@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import apiInstance from "../../utils/axios"
 import UserData from "../plugin/UserData"
 import Sidebar from './Sidebar'
+import { Helmet } from 'react-helmet-async'
 
 function Account() {
     const [profile, setProfile] = useState({})
@@ -16,6 +17,9 @@ function Account() {
     
   return (
     <main className="mt-5" style={{ marginBottom: "170px" }}>
+        <Helmet>
+        <title>Account</title>
+        </Helmet>
         <div className="container">
             <section className="">
                 <div className="row">

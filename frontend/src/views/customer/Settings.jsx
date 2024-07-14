@@ -3,14 +3,22 @@ import Sidebar from './Sidebar'
 import apiInstance from '../../utils/axios'
 import UserData from '../plugin/UserData'
 import Swal from 'sweetalert2'
-import moment from 'moment'
+import { Helmet } from 'react-helmet-async'
+
+const Toast = Swal.mixin ({
+    toast: true,
+    position: "top",
+    showConfirmButton:false,
+    timer:1500,
+    timerProgressBar: true
+  })
 
 function Settings() {
     const [profile, setProfile] = useState({})
     const userData = UserData()
 
     const fetchProfileData = async () => {
-        apiInstance.get(`user/profile/${userData?.user_id}/`).then((res) => {
+        await apiInstance.get(`user/profile/${userData?.user_id}/`).then((res) => {
         setProfile(res.data)
         })
     }
@@ -54,7 +62,11 @@ function Settings() {
                     'Content-Type' : 'mutipart/form-data'
                 }
             })
-            window.location.reload()
+            Toast.fire({
+                icon: "success",
+                title: 'Profile Updated Successfully!'
+              })
+            // window.location.reload()
         } catch (error) {
             console.log(error);
         }
@@ -62,6 +74,9 @@ function Settings() {
 
   return (
     <main className="mt-5">
+        <Helmet>
+        <title>Settings Page</title>
+        </Helmet>
         <div className="container">
             <section className="">
                 <div className="row">

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import apiInstance from '../../utils/axios'
-
+import { Helmet } from 'react-helmet-async'
 
 function PaymentSuccess() {
     const [order, setOrder] = useState([])
@@ -12,8 +12,6 @@ function PaymentSuccess() {
     const urlParam = new URLSearchParams(window.location.search)
     const sessionId = urlParam.get('session_id')
     const paypal_order_id = urlParam.get('paypal_order_id')
-
-    console.log(paypal_order_id);
 
     useEffect(() => {
         apiInstance.get(`checkout/${param.order_oid}/`).then((res) => {
@@ -45,6 +43,9 @@ function PaymentSuccess() {
     return (
         <div>
             <main className="mb-4 mt-4 h-100">
+            <Helmet>
+            <title>Payment Success Page</title>
+            </Helmet>
                 <div className="container">
                 {/* Section: Checkout form */}
                     <section className="">

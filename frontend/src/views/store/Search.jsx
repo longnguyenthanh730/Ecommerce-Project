@@ -5,6 +5,7 @@ import GetCurrentAddress from '../plugin/UserCountry'
 import UserData from '../plugin/UserData'
 import CardID from '../plugin/CardID'
 import Swal from 'sweetalert2'
+import { Helmet } from 'react-helmet-async'
 
 function Search() {
     const[products, setProducts] = useState([])
@@ -82,6 +83,9 @@ function Search() {
 
     return (
         <>
+        <Helmet>
+        <title>Search Product</title>
+        </Helmet>
             <main className="mt-5">
                 <div className="container">
                 <section className="text-center">

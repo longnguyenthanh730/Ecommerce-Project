@@ -1,6 +1,6 @@
 import {useState, useEffect, useContext} from 'react'
 import { useParams } from 'react-router-dom'
-
+import { Link } from 'react-router-dom'
 import apiInstance from '../../utils/axios'
 import GetCurrentAddress from '../plugin/UserCountry'
 import UserData from '../plugin/UserData'
@@ -8,6 +8,7 @@ import CardID from '../plugin/CardID'
 import Swal from 'sweetalert2'
 import moment from 'moment'
 import { CartContext } from '../plugin/Context'
+import { Helmet } from 'react-helmet-async'
 
 const Toast = Swal.mixin ({
     toast: true,
@@ -40,16 +41,22 @@ function ProductDetail() {
     const userData = UserData()
     const cart_id = CardID()
 
+    const [vendor, setVendor] = useState([])
+    const [vendorUser, setVendorUser] = useState([])
 
     useEffect(() => {
-        apiInstance.get(`products/${param.slug}`).then((res) => {
+        apiInstance.get(`products/${param.slug}/`).then((res) => {
             setProduct(res.data)
             setSpecifications(res.data.specification)
             setGallery(res.data.gallery)
             setColor(res.data.color)
             setSize(res.data.size)
+            setVendor(res.data.vendor)
+            setVendorUser(res.data.vendor.user)
         })
     }, [])
+
+    console.log(vendor);
 
     const handleColorButtonClick = (event) => {
         const colorNameInput = event.target.closest('.color_button').parentNode.querySelector(".color_name")
@@ -85,7 +92,7 @@ function ProductDetail() {
             
             //Fetch updated cart items
             const url = userData ? `cart-list/${cart_id}/${userData?.user_id}/` : `cart-list/${cart_id}/`
-            apiInstance.get(url).then((res) => {
+            await apiInstance.get(url).then((res) => {
                 setCartCount(res.data.length)
             })
 
@@ -99,14 +106,10 @@ function ProductDetail() {
         }
     }
 
-
     const fetchReviewData = async () => {
-        if(product !== null){
-            await apiInstance.get(`reviews/${product?.id}/`).then((res) => {
-                console.log(res.data);
-                setReviews(res.data)    
-            })
-        }
+        await apiInstance.get(`reviews/${product?.id}/`).then((res) => {
+            setReviews(res.data)    
+        })
     }
 
     useEffect(() => {
@@ -120,7 +123,7 @@ function ProductDetail() {
         })
     }
 
-    const handleReviewSubmit = (e) => {
+    const handleReviewSubmit = async (e) => {
         e.preventDefault()
 
         const formdata = new FormData()
@@ -129,14 +132,16 @@ function ProductDetail() {
         formdata.append('rating', createReview.rating)
         formdata.append('review', createReview.review)
 
-        apiInstance.post(`reviews/${product?.id}/`, formdata).then((res) => {
-            console.log(res.data);
+        await apiInstance.post(`reviews/${product?.id}/`, formdata).then((res) => {
             fetchReviewData()
         })
     }
     
   return (
     <main className="mb-4 mt-4">
+        <Helmet>
+        <title>{product?.title}</title>
+      </Helmet>
         <div className="container">
             {/*Product details */}
             <section className="mb-9">
@@ -150,10 +155,8 @@ function ProductDetail() {
                                         <img
                                             src={product.image}
                                             style={{
-                                                width: "100%",
-                                                height: 500,
-                                                objectFit: "cover",
-                                                borderRadius: 10
+                                                width: 300,
+                                                height: 600,
                                             }}
                                             alt="Gallery image 1"
                                             className="ecommerce-gallery-main-img active w-100 rounded-4"
@@ -197,7 +200,7 @@ function ProductDetail() {
 
                                     <li style={{ marginLeft: 10, fontSize: 13 }}>
                                         <a href="" className="text-decoration-none">
-                                            <strong className="me-2">4/5</strong>(2 reviews)
+                                            <strong className="me-2">{reviews.rating}</strong>({reviews.length} reviews)
                                         </a>
                                     </li>
                                 </ul>
@@ -296,7 +299,7 @@ function ProductDetail() {
                     </button>
                 </li>
                 <li className="nav-item" role="presentation">
-                    <button className="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">
+                    <button className="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false" >
                         Vendor
                     </button>
                 </li>
@@ -336,15 +339,35 @@ function ProductDetail() {
                                         {" "}
                                         <strong>Color</strong>
                                     </th>
-                                    <td>{colorValue}</td>
+                                    <td>
+                                    {color.map((c, index) => (
+                                        <span key={index}>
+                                            {c.name}
+                                            {index !== color.length - 1 ? ', ' : ''}
+                                        </span>
+                                    ))}
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th className="ps-0 w-25" scope="row">
                                         {" "}
                                         <strong>Size</strong>
                                     </th>
-                                    <td>{sizeValue}</td>
+                                    <td>
+                                    {size.map((s, index) => (
+                                        <span key={index}>
+                                            {s.name}
+                                            {index !== size.length - 1 ? ', ' : ''}
+                                        </span>
+                                    ))}
+                                    </td>
                                 </tr>
+                                {specifications.map((s, index) => (
+                                    <tr key={index}>
+                                        <th className="ps-0 w-25" scope="row"><strong>{s.title}</strong></th>
+                                        <td>{s.content}</td>
+                                    </tr>
+                                ))}
                             </tbody>
                         </table>
                     </div>
@@ -359,21 +382,41 @@ function ProductDetail() {
                     <div className="card mb-3" style={{ maxWidth: 400 }}>
                         <div className="row g-0">
                             <div className="col-md-4">
+                            <Link to={`/vendor/${product?.vendor?.slug}`}>
                                 <img
-                                    src="https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250"
-                                    style={{
-                                        height: "100%",
-                                        width: "100%",
-                                        objectFit: "cover"
-                                    }}
+                                    src={vendor?.image}
+                                    style={{ height: "100%", width: "100%", objectFit: "cover" }}
                                     alt="User Image"
                                     className="img-fluid"
                                 />
+                            </Link>
                             </div>
                             <div className="col-md-8">
                                 <div className="card-body">
-                                    <h5 className="card-title">Long</h5>
-                                    <p className="card-text">Developer</p>
+                                    <h5 className="card-title">{vendor?.name}</h5>
+                                    <p className="card-text">{vendor?.description}</p>
+                                    {/* <div className="d-flex mb-2">
+                                        <ul className="list-inline m-0">
+                                            <li className="list-inline-item">
+                                                <i className="fas fa-star text-primary" />
+                                            </li>
+                                            <li className="list-inline-item">
+                                                <i className="fas fa-star text-primary" />
+                                            </li>
+                                            <li className="list-inline-item">
+                                                <i className="fas fa-star text-primary" />
+                                            </li>
+                                            <li className="list-inline-item">
+                                                <i className="fas fa-star text-primary" />
+                                            </li>
+                                            <li className="list-inline-item">
+                                                <i className="fas fa-star-half-alt text-primary" />
+                                            </li>
+                                        </ul>
+                                        <span className="ms-2">4.5</span>
+                                    </div> */}
+                                    {/* <button className="btn btn-primary me-2">Follow</button>
+                                    <button className="btn btn-secondary">Send Message</button> */}
                                 </div>
                             </div>
                         </div>
@@ -482,82 +525,6 @@ function ProductDetail() {
                                     </div>
                                     ))}
                                 </div>
-                               
-                                {/* More reviews can be added here */}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div
-                    className="tab-pane fade"
-                    id="pills-disabled"
-                    role="tabpanel"
-                    aria-labelledby="pills-disabled-tab"
-                    tabIndex={0}
-                >
-                    <div className="container mt-5">
-                        <div className="row">
-                            {/* Column 1: Form to submit new questions */}
-                            <div className="col-md-6">
-                                <h2>Ask a Question</h2>
-                                <form>
-                                    <div className="mb-3">
-                                        <label htmlFor="askerName" className="form-label">
-                                            Your Name
-                                        </label>
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            id="askerName"
-                                            placeholder="Enter your name"
-                                        />
-                                    </div>
-                                    <div className="mb-3">
-                                        <label htmlFor="questionText" className="form-label">
-                                            Question
-                                        </label>
-                                        <textarea
-                                            className="form-control"
-                                            id="questionText"
-                                            rows={4}
-                                            placeholder="Ask your question"
-                                            defaultValue={""}
-                                        />
-                                    </div>
-                                    <button type="submit" className="btn btn-primary">
-                                        Submit Question
-                                    </button>
-                                </form>
-                            </div>
-                            {/* Column 2: Display existing questions and answers */}
-                            <div className="col-md-6">
-                                <h2>Questions and Answers</h2>
-                                <div className="card mb-3">
-                                    <div className="card-body">
-                                        <h5 className="card-title">User 1</h5>
-                                        <p className="card-text">August 10, 2023</p>
-                                        <p className="card-text">
-                                            What are the available payment methods?
-                                        </p>
-                                        <h6 className="card-subtitle mb-2 text-muted">Answer:</h6>
-                                        <p className="card-text">
-                                            We accept credit/debit cards and PayPal as payment
-                                            methods.
-                                        </p>
-                                    </div>
-                                </div>
-                                <div className="card mb-3">
-                                    <div className="card-body">
-                                        <h5 className="card-title">User 2</h5>
-                                        <p className="card-text">August 15, 2023</p>
-                                        <p className="card-text">How long does shipping take?</p>
-                                        <h6 className="card-subtitle mb-2 text-muted">Answer:</h6>
-                                        <p className="card-text">
-                                            Shipping usually takes 3-5 business days within the US.
-                                        </p>
-                                    </div>
-                                </div>
-                                {/* More questions and answers can be added here */}
                             </div>
                         </div>
                     </div>

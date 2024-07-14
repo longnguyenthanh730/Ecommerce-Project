@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import apiInstance from '../../utils/axios'
 import UserData from '../plugin/UserData'
 import Swal from 'sweetalert2'
+import { Helmet } from 'react-helmet-async'
 
 function AddProduct() {
     const userData = UserData()
@@ -101,6 +102,12 @@ function AddProduct() {
     }
 
     useEffect(() => {
+        if (userData?.vendor_id == 0) {
+            navigate('/vendor/register/')
+        }
+    }, [])
+
+    useEffect(() => {
         apiInstance.get(`category/`).then((res) => {
             setCategory(res.data)
         })
@@ -150,7 +157,7 @@ function AddProduct() {
         Swal.fire({
             icon: 'success',
             title: 'Product Created Successfully!',
-            timer:1500
+            timer: 2000
         })
 
         navigate('/vendor/products/')
@@ -159,6 +166,9 @@ function AddProduct() {
 
   return (
     <div className="container-fluid" id="main">
+        <Helmet>
+        <title>Add Product</title>
+        </Helmet>
         <div className="row row-offcanvas row-offcanvas-left h-100">
             <Sidebar/>
             <div className="col-md-9 col-lg-10 main mt-4">

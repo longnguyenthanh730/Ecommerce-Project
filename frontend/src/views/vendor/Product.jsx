@@ -2,8 +2,9 @@ import React,{useState, useEffect} from 'react'
 import Sidebar from './Sidebar'
 import apiInstance from '../../utils/axios'
 import UserData from '../plugin/UserData'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
+import { Helmet } from 'react-helmet-async'
 
 const Toast = Swal.mixin ({
     toast: true,
@@ -14,9 +15,18 @@ const Toast = Swal.mixin ({
   })
 
 function Product() {
+    
     const [products, setProducts] = useState([])
 
     const userData = UserData()
+
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (userData?.vendor_id == 0) {
+            navigate('/vendor/register/')
+        }
+    }, [])
 
     useEffect(() => {
         apiInstance.get(`vendor/products/${userData?.vendor_id}/`).then((res) => {
@@ -37,7 +47,11 @@ function Product() {
 
 
   return (
+    
     <div className="container-fluid" id="main">
+        <Helmet>
+        <title>Product Page</title>
+        </Helmet>
       <div className="row row-offcanvas row-offcanvas-left h-100">
           <Sidebar />
           <div className="col-md-9 col-lg-10 main mt-2">

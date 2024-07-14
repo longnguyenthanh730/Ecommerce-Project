@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react'
 import Sidebar from './Sidebar'
 import apiInstance from '../../utils/axios'
 import UserData from '../plugin/UserData'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {Line, Bar} from 'react-chartjs-2'
 import { Chart } from 'chart.js/auto'
 import moment from 'moment'
+import { Helmet } from 'react-helmet-async'
 
 export default function Earning() {
     const [earningStats, setEarningStats] = useState({})
@@ -13,6 +14,13 @@ export default function Earning() {
     const [earningChartData, setEarningChartData] = useState([])
 
     const userData = UserData()
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (userData?.vendor_id == 0) {
+            navigate('/vendor/register/')
+        }
+    }, [])
 
     useEffect(() => {
         apiInstance.get(`vendor/total-earning/${userData?.vendor_id}/`).then((res) => {
@@ -43,6 +51,9 @@ export default function Earning() {
 
   return (
     <div className="container-fluid" id="main">
+        <Helmet>
+        <title>Earning Page</title>
+        </Helmet>
         <div className="row row-offcanvas row-offcanvas-left h-100">
             <Sidebar/>
             <div className="col-md-9 col-lg-10 main mt-4">

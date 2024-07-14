@@ -3,6 +3,7 @@ import { login } from '../../utils/auth';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/auth';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async'
 
 function Login() {
     const [email, setEmail] = useState("")
@@ -39,6 +40,9 @@ function Login() {
 
     return (
         <>
+        <Helmet>
+        <title>Login</title>
+        </Helmet>
             <section>
                 <main className="" style={{ marginBottom: 100, marginTop: 50 }}>
                     <div className="container">

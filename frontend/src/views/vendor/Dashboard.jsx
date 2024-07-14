@@ -4,7 +4,8 @@ import apiInstance from '../../utils/axios'
 import UserData from '../plugin/UserData'
 import {Line, Bar} from 'react-chartjs-2'
 import { Chart } from 'chart.js/auto'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate  } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 
 function Dashboard() {
     const [stats, setStats] = useState({})
@@ -13,6 +14,16 @@ function Dashboard() {
     const [products, setProducts] = useState([])
 
     const userData = UserData()
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (userData?.vendor_id == 0) {
+            navigate('/vendor/register/');
+        }
+        if (userData?.vendor_id !== 0) {
+            navigate('/vendor/dashboard/')
+        }
+    }, []);
     
     useEffect(() => {
         apiInstance.get(`vendor/stats/${userData?.vendor_id}/`).then((res) => {
@@ -72,6 +83,9 @@ function Dashboard() {
 
   return (
     <div className="container-fluid" id="main">
+        <Helmet>
+        <title>Vendor Dashboard Page</title>
+        </Helmet>
         <div className="row row-offcanvas row-offcanvas-left h-100">
             {/* Add Side Bar Here */}
             <Sidebar />

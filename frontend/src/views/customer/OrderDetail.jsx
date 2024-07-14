@@ -4,7 +4,7 @@ import apiInstance from "../../utils/axios"
 import UserData from "../plugin/UserData"
 import Sidebar from './Sidebar'
 import { Link, useParams } from "react-router-dom"
-
+import { Helmet } from 'react-helmet-async'
 
 function OrderDetail() {
     const [order, setOrder] = useState([])
@@ -26,6 +26,9 @@ function OrderDetail() {
 
   return (
     <div>
+        <Helmet>
+        <title>Order Detail</title>
+        </Helmet>
         {loading === false &&
         <main className="mt-5">
             <div className="container">

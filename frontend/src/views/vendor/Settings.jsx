@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react'
 import Sidebar from './Sidebar'
 import apiInstance from '../../utils/axios'
 import UserData from '../plugin/UserData'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
+import { Helmet } from 'react-helmet-async'
 
 
 function Settings() {
@@ -13,6 +14,7 @@ function Settings() {
     const [vendorImage, setVendorImage] = useState('')
     
     const userData = UserData()
+    const navigate = useNavigate()
 
     const fetchProfileData = () => {
         apiInstance.get(`vendor/settings/${userData?.user_id}/`).then((res) => {
@@ -27,6 +29,12 @@ function Settings() {
             setVendorImage(res.data.image)
         })
     }
+
+    useEffect(() => {
+        if (userData?.vendor_id == 0) {
+            navigate('/vendor/register/')
+        }
+    }, [])
 
     useEffect (() => {
         fetchProfileData()
@@ -115,6 +123,9 @@ function Settings() {
 
   return (
     <div className="container-fluid" id="main">
+        <Helmet>
+        <title>Settings Page</title>
+        </Helmet>
         <div className="row row-offcanvas row-offcanvas-left h-100">
             <Sidebar/>
             <div className="col-md-9 col-lg-10 main mt-4">

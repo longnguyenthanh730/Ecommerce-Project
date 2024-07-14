@@ -4,6 +4,7 @@ import apiInstance from "../../utils/axios"
 import UserData from "../plugin/UserData"
 import Sidebar from './Sidebar'
 import { Link, useParams } from "react-router-dom"
+import { Helmet } from 'react-helmet-async'
 
 function Invoice() {
     const [order, setOrder] = useState([])
@@ -24,6 +25,9 @@ function Invoice() {
   return (
     <div>
         <>
+        <Helmet>
+        <title>Invoice</title>
+        </Helmet>
             <div className="row d-flex justify-content-center p-2">
                 <div className="receipt-main col-xs-10 col-sm-10 col-md-6 col-xs-offset-1 col-sm-offset-1 col-md-offset-3">
                     <div className="d-flex justify-content-between">

@@ -1,7 +1,7 @@
 import {useState} from 'react'
 import { useSearchParams, useNavigate, Link } from 'react-router-dom'
 import apiInstance from '../../utils/axios'
-
+import { Helmet } from 'react-helmet-async'
 
 function CreatePassword() {
   const [password, setPassword] = useState("")
@@ -45,6 +45,9 @@ function CreatePassword() {
 
   return (
     <section>
+        <Helmet>
+        <title>Create Password</title>
+        </Helmet>
         <main className="" style={{ marginBottom: 100, marginTop: 50 }}>
             <div className="container">
                 {/* Section: Login form */}

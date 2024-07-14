@@ -3,7 +3,8 @@ import Sidebar from './Sidebar'
 import apiInstance from '../../utils/axios'
 import UserData from '../plugin/UserData'
 import Swal from 'sweetalert2'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 
 function Coupon() {
     const [statsCoupon, setStatsCoupon] = useState([])
@@ -15,6 +16,7 @@ function Coupon() {
     })
 
     const userData = UserData()
+    const navigate = useNavigate()
 
     const fetchCouponData = async () => {
         await apiInstance.get(`vendor/coupon-stats/${userData?.vendor_id}/`).then((res) => {
@@ -25,6 +27,12 @@ function Coupon() {
             setCoupons(res.data)
         })
     }
+
+    useEffect(() => {
+        if (userData?.vendor_id == 0) {
+            navigate('/vendor/register/')
+        }
+    }, [])
 
     useEffect (() => {
         fetchCouponData()
@@ -66,6 +74,9 @@ function Coupon() {
   return (
     <>
         <div className="container-fluid" id="main">
+        <Helmet>
+        <title>Coupon Page</title>
+        </Helmet>
             <div className="row row-offcanvas row-offcanvas-left h-100">
                 <Sidebar />
                 <div className="col-md-9 col-lg-10 main mt-4">

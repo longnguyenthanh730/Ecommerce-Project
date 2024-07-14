@@ -1,7 +1,7 @@
 import {useEffect} from 'react'
 import { logout } from '../../utils/auth'
 import { Link } from 'react-router-dom'
-
+import { Helmet } from 'react-helmet-async'
 
 function Logout() {
     useEffect(() => {
@@ -9,6 +9,9 @@ function Logout() {
     }, [])
   return (
     <section>
+        <Helmet>
+        <title>Logout</title>
+        </Helmet>
       <main className="" style={{ marginBottom: 400, marginTop: 150 }}>
           <div className="container">
               <section className="">

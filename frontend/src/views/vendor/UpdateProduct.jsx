@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import apiInstance from '../../utils/axios'
 import UserData from '../plugin/UserData'
 import Swal from 'sweetalert2'
-import moment from 'moment'
+import { Helmet } from 'react-helmet-async'
 
 function UpdateProduct() {
     const userData = UserData()
@@ -19,7 +19,11 @@ function UpdateProduct() {
 
     const navigate = useNavigate()
 
-    console.log(product);
+    useEffect(() => {
+        if (userData?.vendor_id == 0) {
+            navigate('/vendor/register/')
+        }
+    }, [])
 
     const handleAddMore = (setStateFunction) => {
         setStateFunction((prevState) => [...prevState, {}])
@@ -58,7 +62,7 @@ function UpdateProduct() {
             reader.readAsDataURL(file)
         } else {
             setStateFunction((prevState) => {
-                const newState = [prevState]
+                const newState = [...prevState]
                 newState[index].image = null
                 newState[index].preview = null
                 return newState
@@ -113,7 +117,7 @@ function UpdateProduct() {
         const formdata = new FormData()
         Object.entries(product).forEach(([key, value]) => {
             if(key === 'image' && value) {
-                formdata.append(key,value.file)
+                formdata.append(key, value.file || value)
             } else {
                 formdata.append(key, value)
             }
@@ -139,7 +143,7 @@ function UpdateProduct() {
 
         gallery.forEach((item, index) => {
             if(item.image) {
-                formdata.append(`gallery[${index}][image]`, item.image.file)
+                formdata.append(`gallery[${index}][image]`, item.image.file || item.image)
             }
         })
 
@@ -151,7 +155,7 @@ function UpdateProduct() {
         Swal.fire({
             icon: 'success',
             title: 'Product Updated Successfully!',
-            timer:1500
+            // timer: 2000
         })
 
         navigate('/vendor/products/')
@@ -159,6 +163,9 @@ function UpdateProduct() {
 
   return (
     <div className="container-fluid" id="main">
+        <Helmet>
+        <title>Update Product</title>
+        </Helmet>
         <div className="row row-offcanvas row-offcanvas-left h-100">
             <Sidebar/>
             <div className="col-md-9 col-lg-10 main mt-4">
@@ -241,15 +248,15 @@ function UpdateProduct() {
                                                     <div key={index} className="row text-dark">
                                                         <div className="col-lg-6 mb-2">
                                                             {item.image && (item.image.preview ? (
-                                                                <img src={item.image.preview} alt="" style={{width: '100%', height: '300px', objectFit: 'cover', borderRadius:'10px' }} />
+                                                                <img src={item.image.preview} alt="" style={{width: '100%', height: '500px'}} />
                                                             ) : ( 
-                                                                <img src={item.image} alt="" style={{width: '100%', height: '300px', objectFit: 'cover', borderRadius:'10px' }} />
+                                                                <img src={item.image} alt="" style={{width: '100%', height: '500px'}} />
                                                             ))}
 
                                                             {!item.image &&
                                                                 <img src='https://cloud-atg.moph.go.th/quality/sites/default/files/default_images/default.png'
                                                                 alt="" 
-                                                                style={{width: '100%', height: '300px', objectFit: 'cover', borderRadius:'10px' }}  
+                                                                style={{width: '100%', height: '500px'}}  
                                                             />
                                                             }
                                                         </div>
